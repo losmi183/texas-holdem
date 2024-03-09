@@ -15,5 +15,8 @@ use App\Http\Controllers\DeckController;
 */
 
 Route::get('/', [DeckController::class, 'create']);
+Route::get('/session', function() {
+    dd(session()->get('table'));
+});
 
 

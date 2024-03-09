@@ -23,8 +23,14 @@ return [
         4 => '♣'
     ],
     'tableMaxSeats' => [
-        '6' => 'Six seats',
-        '8' => 'Eight seats',
-        '9' => 'Nine seats',
+        6 => 'Six seats',
+        8 => 'Eight seats',
+        9 => 'Nine seats',
+    ],
+    'phases' => [
+        0 => 'PreFlop',
+        1 => 'Flop',
+        2 => 'Turn',
+        3 => 'River'   
     ]
 ];

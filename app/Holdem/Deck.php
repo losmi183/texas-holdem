@@ -3,28 +3,32 @@
 namespace App\Holdem;
 
 class Deck {
-    private $cards = [];
-    private $config = [];
+    private array $card;
+    private array $suit;
 
-    public function __construct() 
-    {        
-        $this->config = config('holdem');
+    public $cards = [];
+    public function __construct(array $card, array $suit) 
+    {   
+        $this->card = $card;
+        $this->suit = $suit;
         $this->create();
         shuffle($this->cards);
     }
 
     public function create(): void
     {
-        foreach ($this->config['card'] as $rank => $symbol) {
-            foreach ($this->config['suit'] as $suit_id => $suit) {
+        foreach ($this->card as $rank => $symbol) {
+            foreach ($this->suit as $suit_id => $suit) {
                 $this->cards[] = new Card($rank, $symbol, $suit_id, $suit);
             }
         }
     }
 
-    public function get(): array
+    public function dealCard(): Card
     {
-        return $this->cards;
+        $card = $this->cards[0];
+        unset($this->cards[0]);        
+        $this->cards = array_values($this->cards);
+        return $card;
     }
-
 }

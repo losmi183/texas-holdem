@@ -2,13 +2,19 @@
 
 namespace App\Holdem;
 
+use App\Models\User;
+
 class Player {
 
-    private int $id;
-    private string $name;
-    private int $chips;
+    public int $id;
+    public string $name;
+    public int $chips;
+    public array $hand;
 
-    public function __construct() {
-
+    public function __construct(User $user) {
+        $this->id = $user->id;
+        $this->name = $user->name;
+        $this->chips = 1000;
+        $this->hand = [];
     }
 }

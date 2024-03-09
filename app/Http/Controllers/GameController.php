@@ -13,6 +13,11 @@ class GameController extends Controller
     public function gameStart(GameServices $gameServices)
     {
         // 4 random players on 6 seats table
-        $gameServices->gameStart(User::take(4)->get(), 6);
+        $gameServices->gameInit(User::take(4)->get(), 6);
+    }
+
+    public function play()
+    {
+        dd(session()->get('table'));
     }
 }

@@ -8,11 +8,13 @@ use Illuminate\Support\Collection;
 
 class GameServices {
 
-    public function gameStart(Collection $players,  int $tableMaxSeats): void
+    public function gameInit(Collection $players,  int $tableMaxSeats): void
     {   
         $table = new Table($tableMaxSeats, $players);
-
-        dd($table);
+        session()->put('table', $table);
+    
+        // // Dohvati objekt iz sesije
+        dd(session()->get('table'));
+    
     }
-
 }

@@ -17,3 +17,5 @@ use App\Http\Controllers\GameController;
 
 Route::get('/start-game', [GameController::class, 'gameStart']);
 
+Route::get('/play', [GameController::class, 'play']);
+
