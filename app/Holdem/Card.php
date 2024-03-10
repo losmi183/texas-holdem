@@ -3,11 +3,11 @@
 namespace App\Holdem;
 
 class Card {
-    private string $rank;
+    public string $rank;
     public static $card;
-    private int $suit_id;
-    private string $suit;
-    private string $symbol;
+    public int $suit_id;
+    public string $suit;
+    public string $symbol;
 
     public function __construct(int $rank, string $symbol, int $suit_id, string $suit) {
         $this->rank = $rank;

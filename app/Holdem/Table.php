@@ -2,6 +2,7 @@
 namespace App\Holdem;
 
 use App\Holdem\Player;
+use App\Services\HandEvaluatorService;
 use Illuminate\Support\Collection;
 
 class Table
@@ -57,5 +58,9 @@ class Table
         $this->turn = $this->deck->dealCard();
         // Deal river 
         $this->river = $this->deck->dealCard();
+
+        $cards = array_merge($this->flop, [$this->turn], [$this->river], $this->seats[0]->hand);
+
+        (new HandEvaluatorService)->evaluateHand($cards, $this->config['card'], $this->config['suit']);
     }
 }
