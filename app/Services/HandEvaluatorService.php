@@ -2,23 +2,19 @@
 
 namespace App\Services;
 
+use App\Holdem\Hand;
+
 class HandEvaluatorService
 {
+    private array $handRanks;
+
+    public function __construct(Type $var = null) {
+        $this->handRanks = config('holdem.handRanks');
+    }
+
     public function evaluateHand(array $cards, array $rank, array $suit)
     {   
-        foreach($cards as $key=>$card) {
-            if($key>=6) {
-                $card->suit_id = 2;
-                $card->suit = '♥';
-                $card->rank = 2 + $key +2;
-                $card->symbol = 2 + $key+2;
-                continue;
-            }
-            $card->rank = 2 + $key;
-            $card->symbol = 2 + $key;
-            $card->suit_id = 1;
-            $card->suit = '♠';
-        }
+        $cards = HandGenerator::generateStraightFlush($cards);
         $hand = new \stdClass;
 
         $ranks = $this->rankCounts($cards, $rank, $suit);
@@ -26,12 +22,18 @@ class HandEvaluatorService
 
         $this->isFlushStraight($cards, $ranks, $suits);
         
-        // if ($hand = $this->isFlushStraight($cards, $ranks, $suits)) {
-        //     return $hand;
-        // }
+        // Card ranks 9 and 8 - Flush Royal and Strait Flush  
+        if ($hand = $this->isFlushStraight($cards, $ranks, $suits)) {
+            return $hand;  
+        }
+        // Card rank 7 -Four Of A Kind
+        if ($hand = $this->isFourOfAKind($cards, $ranks, $suits)) {
+            return $hand;  
+        }
     }
 
-    private function isFlushStraight(array $cards, array $ranks, array $suits) 
+
+    private function isFlushStraight(array $cards, array $ranks, array $suits): Hand|bool
     {   
         // Finding flush - 5 of the same suit
         $flush = false;
@@ -42,7 +44,6 @@ class HandEvaluatorService
                 });
             }
         }
-        dump($flush);
         if(!$flush) {
             return false;
         }
@@ -65,12 +66,23 @@ class HandEvaluatorService
 
         // Checking for at least 5 consecutive cards
         if ($maxConsecutiveCount >= 5) {
-            return $maxRank; // Returns the highest rank card in strait
+            if($maxRank == 14) {
+                return new Hand($this->handRanks[9], 9, $maxRank); // Flush Royal (9)
+            }
+            return new Hand($this->handRanks[8], 8, $maxRank); // Strait flush (8)
         } else {
             return false;
         }
-        
+    }
 
+    private function isFourOfAKind(array $cards, array $ranks, array $suits): Hand|bool
+    {
+        $fourOfAKind = false;
+        foreach ($ranks as $rank_id => $number) {
+            if($number == 4) {
+                
+            }
+        }
     }
     
     

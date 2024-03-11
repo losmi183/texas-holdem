@@ -32,5 +32,17 @@ return [
         1 => 'Flop',
         2 => 'Turn',
         3 => 'River'   
+    ],
+    'handRanks' => [
+        9 => "Royal Flush",
+        8 => "Straight Flush",
+        7 => "Four of a Kind",
+        6 => "Full House",
+        5 => "Flush",
+        4 => "Straight",
+        3 => "Three of a Kind",
+        2 => "Two Pair",
+        1 => "One Pair",
+        0 => "High Card"
     ]
 ];
