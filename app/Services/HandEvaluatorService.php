@@ -14,7 +14,8 @@ class HandEvaluatorService
 
     public function evaluateHand(array $cards, array $rank, array $suit)
     {   
-        $cards = HandGenerator::generateStraightFlush($cards);
+        // $cards = HandGenerator::generateStraightFlush($cards);
+        $cards = HandGenerator::generateFourOfAKind($cards);
         $hand = new \stdClass;
 
         $ranks = $this->rankCounts($cards, $rank, $suit);
@@ -27,9 +28,9 @@ class HandEvaluatorService
             return $hand;  
         }
         // Card rank 7 -Four Of A Kind
-        // if ($hand = $this->isFourOfAKind($cards, $ranks, $suits)) {
-        //     return $hand;  
-        // }
+        if ($hand = $this->isFourOfAKind($cards, $ranks, $suits)) {
+            return $hand;  
+        }
     }
 
 
@@ -75,15 +76,26 @@ class HandEvaluatorService
         }
     }
 
-    // private function isFourOfAKind(array $cards, array $ranks, array $suits): Hand|bool
-    // {
-    //     $fourOfAKind = false;
-    //     foreach ($ranks as $rank_id => $number) {
-    //         if($number == 4) {
-                
-    //         }
-    //     }
-    // }
+    private function isFourOfAKind(array $cards, array $ranks, array $suits): Hand|bool
+    {
+        $fourOfAKind = false;
+        $maxCardRank = false;
+        $secondMaxCardRank = 0;
+        foreach ($ranks as $rank_id => $number) {
+            if($number == 4) {
+                $fourOfAKind = true;
+                $maxCardRank = $rank_id;
+            } else {
+                if($rank_id > $secondMaxCardRank) {
+                    $secondMaxCardRank = $rank_id;
+                }
+            }
+        }
+        if($fourOfAKind) {
+            return new Hand($this->handRanks[7], 7, $maxCardRank, $secondMaxCardRank); // Strait flush (8)
+        }
+        return false;
+    }
     
     
 

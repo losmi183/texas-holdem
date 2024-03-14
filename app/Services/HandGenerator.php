@@ -32,4 +32,33 @@ class HandGenerator
         }
         return $cards;
     }
+
+    public static function generateFourOfAKind(array $cards = null): array
+    {
+        $config = config('holdem');
+        $suitsArray = $config['suit'];
+        // Generiši karte ako nisu date
+        if ($cards === null) {
+            $cards = [];
+            $numOfCards = 7;
+            for ($i = 0; $i < $numOfCards; $i++) {
+                $cards[] = new Card(2, 2, 2, '♥');
+            }
+        }
+        foreach ($cards as $key => $card) {
+            if ($key < 4) {
+                $card->suit_id = $key+1;
+                $card->suit = $suitsArray[$key+1];
+                $card->rank = 10;
+                $card->symbol = 10;
+                continue;
+            } else{
+                $card->suit_id = 1;
+                $card->suit = '♠';
+                $card->rank = 2 + $key;
+                $card->symbol = 2 + $key;
+            }
+        }
+        return $cards;
+    }
 }
