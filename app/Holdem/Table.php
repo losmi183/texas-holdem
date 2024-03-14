@@ -70,6 +70,7 @@ class Table
                 $seat->finalCards = $handEvaluatorService->evaluateHand($playerAndTableCards, $this->config['card'], $this->config['suit']);     
             }
         }
-        dd($this->seats);
+
+        dd($this);
     }
 }
