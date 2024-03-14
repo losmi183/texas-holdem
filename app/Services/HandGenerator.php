@@ -25,8 +25,8 @@ class HandGenerator
                 $card->symbol = 2 + $key+2;
                 continue;
             }
-            $card->rank = 2 + $key;
-            $card->symbol = 2 + $key;
+            $card->rank = 8 + $key;
+            $card->symbol = 8 + $key;
             $card->suit_id = 1;
             $card->suit = '♠';
         }

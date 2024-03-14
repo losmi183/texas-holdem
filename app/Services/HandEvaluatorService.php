@@ -27,9 +27,9 @@ class HandEvaluatorService
             return $hand;  
         }
         // Card rank 7 -Four Of A Kind
-        if ($hand = $this->isFourOfAKind($cards, $ranks, $suits)) {
-            return $hand;  
-        }
+        // if ($hand = $this->isFourOfAKind($cards, $ranks, $suits)) {
+        //     return $hand;  
+        // }
     }
 
 
@@ -75,15 +75,15 @@ class HandEvaluatorService
         }
     }
 
-    private function isFourOfAKind(array $cards, array $ranks, array $suits): Hand|bool
-    {
-        $fourOfAKind = false;
-        foreach ($ranks as $rank_id => $number) {
-            if($number == 4) {
+    // private function isFourOfAKind(array $cards, array $ranks, array $suits): Hand|bool
+    // {
+    //     $fourOfAKind = false;
+    //     foreach ($ranks as $rank_id => $number) {
+    //         if($number == 4) {
                 
-            }
-        }
-    }
+    //         }
+    //     }
+    // }
     
     
 
