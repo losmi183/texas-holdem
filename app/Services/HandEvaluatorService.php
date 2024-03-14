@@ -22,7 +22,7 @@ class HandEvaluatorService
         // $cards = HandGenerator::threeOfAKind($cards);
         // $cards = HandGenerator::twoPairs($cards);
         // $cards = HandGenerator::onePair($cards);
-        $cards = HandGenerator::highCard($cards);
+        // $cards = HandGenerator::highCard($cards);
         $hand = new \stdClass;
 
         $ranks = $this->rankCounts($cards, $rank, $suit);

@@ -59,8 +59,17 @@ class Table
         // Deal river 
         $this->river = $this->deck->dealCard();
 
-        $cards = array_merge($this->flop, [$this->turn], [$this->river], $this->seats[0]->hand);
-
-        (new HandEvaluatorService)->evaluateHand($cards, $this->config['card'], $this->config['suit']);
+        /**
+         * Evaluate every player hand
+         */
+        $handEvaluatorService = new HandEvaluatorService;
+        $tableCards = array_merge($this->flop, [$this->turn], [$this->river]);
+        foreach ($this->seats as $key => $seat) {
+            if ($seat) {
+                $playerAndTableCards = array_merge($tableCards, $seat->hand);
+                $seat->finalCards = $handEvaluatorService->evaluateHand($playerAndTableCards, $this->config['card'], $this->config['suit']);     
+            }
+        }
+        dd($this->seats);
     }
 }
