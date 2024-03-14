@@ -15,20 +15,28 @@ class HandEvaluatorService
     public function evaluateHand(array $cards, array $rank, array $suit)
     {   
         // $cards = HandGenerator::generateStraightFlush($cards);
-        $cards = HandGenerator::generateFourOfAKind($cards);
+        // $cards = HandGenerator::generateFourOfAKind($cards);
+        // $cards = HandGenerator::fullHouse($cards);
+        $cards = HandGenerator::flush($cards);
         $hand = new \stdClass;
 
         $ranks = $this->rankCounts($cards, $rank, $suit);
         $suits = $this->suitCounts($cards, $rank, $suit);     
 
-        $this->isFlushStraight($cards, $ranks, $suits);
-        
         // Card ranks 9 and 8 - Flush Royal and Strait Flush  
         if ($hand = $this->isFlushStraight($cards, $ranks, $suits)) {
             return $hand;  
         }
         // Card rank 7 -Four Of A Kind
         if ($hand = $this->isFourOfAKind($cards, $ranks, $suits)) {
+            return $hand;  
+        }
+        // Card rank 6 -Full House
+        if ($hand = $this->isFullHouse($cards, $ranks, $suits)) {
+            return $hand;  
+        }
+        // Card rank 6 -Flush
+        if ($hand = $this->isFlush($cards, $ranks, $suits)) {
             return $hand;  
         }
     }
@@ -93,6 +101,49 @@ class HandEvaluatorService
         }
         if($fourOfAKind) {
             return new Hand($this->handRanks[7], 7, $maxCardRank, $secondMaxCardRank); // Strait flush (8)
+        }
+        return false;
+    }
+    
+    private function isFullHouse(array $cards, array $ranks, array $suits): Hand|bool
+    {
+        $treeOfAKind = false;
+        $twoOfAKind = false;
+        $maxCardRank = false;
+        $secondMaxCardRank = false;
+        foreach ($ranks as $rank_id => $number) {
+            if($number == 3) {
+                $treeOfAKind = true;
+                $maxCardRank = $rank_id;
+            } elseif($number == 2) {
+                $twoOfAKind = true;
+                $secondMaxCardRank = $rank_id;
+            }         
+        }
+        if($treeOfAKind && $twoOfAKind) {
+            return new Hand($this->handRanks[6], 6, $maxCardRank, $secondMaxCardRank); // Strait flush (8)
+        }
+        return false;
+    }
+    private function isFlush(array $cards, array $ranks, array $suits): Hand|bool
+    {
+        $flush = false;
+        $suit_id = null;
+        $maxCardRank = 0;
+        foreach ($suits as $suit => $number) {
+            if($number == 5) {
+                $flush = true;
+                $suit_id = $suit;
+            }  
+        }
+        if($flush) {            
+            foreach ($cards as $card) {
+                if ($card->suit_id === $suit_id && $card->rank > $maxCardRank) {
+                    $maxCardRank = $card->rank;
+                }
+            }            
+            
+            return new Hand($this->handRanks[6], 6, $maxCardRank); // Strait flush (8)
         }
         return false;
     }
