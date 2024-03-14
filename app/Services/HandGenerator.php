@@ -125,4 +125,55 @@ class HandGenerator
         $cards[] = new Card(2, 2, 1, '♠');
         return $cards;
     }
+
+    public static function threeOfAKind(array $cards = null): array
+    {        
+        $cards = [];
+        $cards[] = new Card(10, 10, 2, '♥');
+        $cards[] = new Card(10, 10, 1, '♠');
+        $cards[] = new Card(10, 10, 3, '♦');
+        $cards[] = new Card(7, 7, 3, '♦');
+        $cards[] = new Card(6, 6, 2, '♥');
+        $cards[] = new Card(3, 3, 1, '♠');
+        $cards[] = new Card(2, 2, 1, '♠');
+        return $cards;
+    }
+    public static function twoPairs(array $cards = null): array
+    {        
+        $cards = [];
+        $cards[] = new Card(6, 6, 2, '♥');
+        $cards[] = new Card(6, 6, 1, '♠');
+        $cards[] = new Card(10, 10, 2, '♥');
+        $cards[] = new Card(7, 7, 1, '♠');
+        $cards[] = new Card(7, 7, 3, '♦');
+        $cards[] = new Card(10, 10, 1, '♠');
+        $cards[] = new Card(2, 2, 1, '♠');
+        return $cards;
+    }
+    
+    public static function onePair(array $cards = null): array
+    {        
+        $cards = [];
+        $cards[] = new Card(10, 10, 2, '♥');
+        $cards[] = new Card(10, 10, 1, '♠');
+        $cards[] = new Card(9, 9, 2, '♥');
+        $cards[] = new Card(7, 7, 1, '♠');
+        $cards[] = new Card(6, 6, 1, '♠');
+        $cards[] = new Card(3, 3, 3, '♦');
+        $cards[] = new Card(2, 2, 1, '♠');
+        return $cards;
+    }
+    
+    public static function highCard(array $cards = null): array
+    {        
+        $cards = [];
+        $cards[] = new Card(10, 10, 2, '♥');
+        $cards[] = new Card(9, 9, 2, '♥');
+        $cards[] = new Card(7, 7, 1, '♠');
+        $cards[] = new Card(6, 6, 1, '♠');
+        $cards[] = new Card(4, 4, 1, '♠');
+        $cards[] = new Card(3, 3, 3, '♦');
+        $cards[] = new Card(2, 2, 1, '♠');
+        return $cards;
+    }
 }

@@ -18,7 +18,11 @@ class HandEvaluatorService
         // $cards = HandGenerator::generateFourOfAKind($cards);
         // $cards = HandGenerator::fullHouse($cards);
         // $cards = HandGenerator::flush($cards);
-        $cards = HandGenerator::straight($cards);
+        // $cards = HandGenerator::straight($cards);
+        // $cards = HandGenerator::threeOfAKind($cards);
+        // $cards = HandGenerator::twoPairs($cards);
+        // $cards = HandGenerator::onePair($cards);
+        $cards = HandGenerator::highCard($cards);
         $hand = new \stdClass;
 
         $ranks = $this->rankCounts($cards, $rank, $suit);
@@ -42,6 +46,22 @@ class HandEvaluatorService
         }
         // Card rank 4 - Straight
         if ($hand = $this->isStraight($cards, $ranks, $suits)) {
+            return $hand;  
+        }
+        // Card rank 3 - Tree Of A Kind
+        if ($hand = $this->isTreeOfAKind($cards, $ranks, $suits)) {
+            return $hand;  
+        }
+        // Card rank 2 - Tree Of A Kind
+        if ($hand = $this->isTwoPairs($cards, $ranks, $suits)) {
+            return $hand;  
+        }
+        // Card rank 1 -  One pair
+        if ($hand = $this->isOnePair($cards, $ranks, $suits)) {
+            return $hand;  
+        }
+        // Card rank 0 -  One pair
+        if ($hand = $this->isHighCard($cards, $ranks, $suits)) {
             return $hand;  
         }
     }
@@ -153,7 +173,7 @@ class HandEvaluatorService
         return false;
     }
     
-    private function isStraight(array $cards): Hand|bool
+    private function isStraight(array $cards, array $ranks, array $suits): Hand|bool
     {
         // sort by rank
         usort($cards, function($a, $b) {
@@ -186,8 +206,79 @@ class HandEvaluatorService
             return false;
         }
     }
+
+    private function isTreeOfAKind(array $cards, array $ranks, array $suits): Hand|bool
+    {
+        $treeOfAKind = false;
+        $maxCardRank = false;
+        $secondMaxCardRank = 0;
+        foreach ($ranks as $rank_id => $number) {
+            if($number == 3) {
+                $treeOfAKind = true;
+                $maxCardRank = $rank_id;
+            } else {
+                if($rank_id > $secondMaxCardRank) {
+                    $secondMaxCardRank = $rank_id;
+                }
+            }
+        }
+        if($treeOfAKind) {
+            return new Hand($this->handRanks[3], 3, $maxCardRank, $secondMaxCardRank); // Strait flush (8)
+        }
+        return false;
+    }
     
     
+    private function isTwoPairs(array $cards, array $ranks, array $suits): Hand|bool
+    {
+        $pairs = [];
+        foreach ($ranks as $rank => $number) {
+            if ($number === 2) {
+                $pairs[] = $rank;
+            }
+        }
+
+        // Sortiramo parove od najvećeg ka najmanjem
+        rsort($pairs);
+
+        if (count($pairs) >= 2) {
+            return new Hand($this->handRanks[2], 2, $pairs[0], $pairs[1]);
+        }
+        return false;
+    }
+
+    private function isOnePair(array $cards, array $ranks, array $suits): Hand|bool
+    {
+        $pairs = [];
+        foreach ($ranks as $rank => $number) {
+            if ($number === 2) {
+                $pairs[] = $rank;
+            }
+        }
+
+        if (count($pairs) === 1) {
+            $maxCardRank = $pairs[0];
+            $secondMaxCardRank = 0;
+            foreach ($cards as $card) {
+                if ($card->rank !== $maxCardRank && $card->rank > $secondMaxCardRank && $card->rank !== 14) {
+                    $secondMaxCardRank = $card->rank;
+                }
+            }
+            return new Hand($this->handRanks[2], 2, $maxCardRank, $secondMaxCardRank);
+        }
+        return false;
+    }
+
+
+    private function isHighCard(array $cards, array $ranks, array $suits): Hand|bool
+    {
+        usort($cards, function($a, $b) {
+            return $b->rank - $a->rank;
+        });
+        return new Hand($this->handRanks[0], 0, $cards[0]->rank, $cards[1]->rank);
+    }
+
+
 
     private function rankCounts(array $cards, array $rank, array $suit): array
     {       

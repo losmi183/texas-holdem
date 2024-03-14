@@ -41,7 +41,7 @@ return [
         5 => "Flush",
         4 => "Straight",
         3 => "Three of a Kind",
-        2 => "Two Pair",
+        2 => "Two Pairs",
         1 => "One Pair",
         0 => "High Card"
     ]
