@@ -17,7 +17,8 @@ class HandEvaluatorService
         // $cards = HandGenerator::generateStraightFlush($cards);
         // $cards = HandGenerator::generateFourOfAKind($cards);
         // $cards = HandGenerator::fullHouse($cards);
-        $cards = HandGenerator::flush($cards);
+        // $cards = HandGenerator::flush($cards);
+        $cards = HandGenerator::straight($cards);
         $hand = new \stdClass;
 
         $ranks = $this->rankCounts($cards, $rank, $suit);
@@ -35,8 +36,12 @@ class HandEvaluatorService
         if ($hand = $this->isFullHouse($cards, $ranks, $suits)) {
             return $hand;  
         }
-        // Card rank 6 -Flush
+        // Card rank 5 -Flush
         if ($hand = $this->isFlush($cards, $ranks, $suits)) {
+            return $hand;  
+        }
+        // Card rank 4 - Straight
+        if ($hand = $this->isStraight($cards, $ranks, $suits)) {
             return $hand;  
         }
     }
@@ -143,9 +148,43 @@ class HandEvaluatorService
                 }
             }            
             
-            return new Hand($this->handRanks[6], 6, $maxCardRank); // Strait flush (8)
+            return new Hand($this->handRanks[5], 5, $maxCardRank); // Strait flush (8)
         }
         return false;
+    }
+    
+    private function isStraight(array $cards): Hand|bool
+    {
+        // sort by rank
+        usort($cards, function($a, $b) {
+            return $a->rank - $b->rank;
+        });
+
+        // check sequence of 5
+        $consecutiveCount = 1;
+        $maxConsecutiveCount = 1;
+        $maxRank = $cards[0]->rank;
+        $startIndex = 0;
+        for ($i = 1; $i < count($cards); $i++) {
+            if ($cards[$i]->rank == $cards[$i - 1]->rank + 1) {
+                $consecutiveCount++;
+                if ($consecutiveCount > $maxConsecutiveCount) {
+                    $maxConsecutiveCount = $consecutiveCount;
+                    $maxRank = $cards[$i]->rank;
+                    $startIndex = $i - $maxConsecutiveCount + 1;
+                }
+            } elseif ($cards[$i]->rank != $cards[$i - 1]->rank) {
+                $consecutiveCount = 1;
+            }
+        }
+
+        // Checking for at least 5 consecutive cards
+        if ($maxConsecutiveCount >= 5) {
+            // $straightCards = array_slice($cards, $startIndex, $maxConsecutiveCount);
+            return new Hand($this->handRanks[4], 4, $maxRank); // Straight (4)
+        } else {
+            return false;
+        }
     }
     
     

@@ -4,7 +4,6 @@ namespace App\Holdem;
 
 class Card {
     public string $rank;
-    public static $card;
     public int $suit_id;
     public string $suit;
     public string $symbol;

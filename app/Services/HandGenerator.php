@@ -112,4 +112,17 @@ class HandGenerator
         $cards[] = new Card(10, 10, 1, '♠');
         return $cards;
     }
+    public static function straight(array $cards = null): array
+    {
+        // Generate cards if not 
+        $cards = [];
+        $cards[] = new Card(5, 5, 2, '♥');
+        $cards[] = new Card(9, 9, 1, '♠');
+        $cards[] = new Card(8, 8, 2, '♥');
+        $cards[] = new Card(7, 7, 3, '♦');
+        $cards[] = new Card(6, 6, 2, '♥');
+        $cards[] = new Card(3, 3, 1, '♠');
+        $cards[] = new Card(2, 2, 1, '♠');
+        return $cards;
+    }
 }
