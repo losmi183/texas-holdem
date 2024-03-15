@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedSmallInteger('table_max_seats');
-            $table->unsignedInteger('buyInn');
-            $table->unsignedInteger('smallBlind');
-            $table->unsignedInteger('bigBlind');
+            $table->unsignedInteger('buy_in');
+            $table->unsignedInteger('small_blind');
+            $table->unsignedInteger('big_blind');
 
             $table->timestamps();
         });

@@ -7,24 +7,33 @@ use Illuminate\Support\Collection;
 
 class Table
 {   
+    // Table fields
     public array $config;
-    private string $id;
+    public string $id;
+    public int $tableMaxSeats;
+    public int $buyIn = 20;
+    public int $smallBlind = 5;
+    public int $bigBlind = 10;
+
+    // Game fields
     public int $phase = 0;
     public int $pot = 0;
-    public int $buyInn = 20;
-    public int $tableMaxSeats;
     public array $seats;
     private Deck $deck;    
     public Collection $players;
-    private ?array $flop = null;
-    private ?Card $turn = null;
-    private ?Card $river = null;
+    public ?array $flop = null;
+    public ?Card $turn = null;
+    public ?Card $river = null;
 
-    public function __construct(int $tableMaxSeats)
+    public function __construct(int $tableMaxSeats, int $buyIn, int $smallBlind, int $bigBlind)
     {
         $this->config = config('holdem');
         $this->id = rand(100,999) . time(); // random id for table generate from 100-999 and timestamp
         $this->tableMaxSeats = $tableMaxSeats;
+        $this->buyIn = $buyIn;
+        $this->smallBlind = $smallBlind;
+        $this->bigBlind = $bigBlind;
+        
         $this->deck = new Deck($this->config['card'], $this->config['suit'] );
         
         // Generate empty seats array

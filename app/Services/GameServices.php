@@ -8,20 +8,15 @@ use Illuminate\Support\Collection;
 
 class GameServices {
 
-    public function gameInit(Collection $players, int $tableMaxSeats): void
+    public function gameInit(Collection $players, int $tableMaxSeats, int $buyIn, int $smallBlind, int $bigBlind): Table
     {   
         // Init empty table with players and deck
-        $table = new Table($tableMaxSeats);
+        $table = new Table($tableMaxSeats, $buyIn, $smallBlind, $bigBlind);
 
         $table->addPlayers($players);
         $table->deal();
         $table->evaluateHands();
 
-        // $table = $table->deal();
-        session()->put('table', $table);
-    
-        // // Dohvati objekt iz sesije
-        dd(session()->get('table'));
-    
+        return $table;    
     }
 }
