@@ -16,11 +16,14 @@ return new class extends Migration
         Schema::create('seats', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('table_id');
+            $table->unsignedBigInteger('table_id')->nullable();
             $table->foreign('table_id')->references('id')->on('tables')->onDelete('cascade');
 
-            $table->unsignedBigInteger('player_id')->nullable;
-            $table->foreign('player_id')->references('id')->on('players')->onDelete('set null');
+            $table->unsignedBigInteger('player_id')->nullable();
+            $table->foreign('player_id')->references('id')->on('users')->onDelete('set null');
+
+            $table->unsignedBigInteger('stack');
+            $table->boolean('active');
 
             $table->timestamps();
         });

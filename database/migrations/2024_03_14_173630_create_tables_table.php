@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('tables', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedSmallInteger('tableMaxSeats');
+            $table->unsignedSmallInteger('table_max_seats');
             $table->unsignedInteger('buyInn');
             $table->unsignedInteger('smallBlind');
             $table->unsignedInteger('bigBlind');

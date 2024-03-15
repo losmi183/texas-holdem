@@ -16,7 +16,6 @@ class Table
     public array $seats;
     private Deck $deck;    
     public Collection $players;
-    // dealed cards
     private ?array $flop = null;
     private ?Card $turn = null;
     private ?Card $river = null;
@@ -24,7 +23,7 @@ class Table
     public function __construct(int $tableMaxSeats, ?Collection $players)
     {
         $this->config = config('holdem');
-        $this->id = rand(100,999).'-'. time();
+        $this->id = rand(100,999) . time(); // random id for table generate from 100-999 and timestamp
         $this->tableMaxSeats = $tableMaxSeats;
         $this->deck = new Deck($this->config['card'], $this->config['suit'] );
         $this->players = $players;

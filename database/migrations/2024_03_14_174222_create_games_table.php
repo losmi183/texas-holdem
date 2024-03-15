@@ -16,11 +16,13 @@ return new class extends Migration
         Schema::create('games', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('table_id')->nullable;
+            $table->unsignedBigInteger('table_id')->nullable();
             $table->foreign('table_id')->references('id')->on('tables')->onUpdate('cascade')->onDelete('set null');
             
             $table->unsignedSmallInteger('phase');
             $table->unsignedBigInteger('pot');
+
+            $table->json('table_cards');
 
             $table->timestamps();
         });
