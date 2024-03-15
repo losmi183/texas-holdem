@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Services\GameServices;
 use App\Services\UserServices;
 use App\Services\DatabaseServices;
+use App\Http\Requests\GetTableRequest;
 
 class GameController extends Controller
 {
     
 
-    public function gameStart(GameServices $gameServices, UserServices $userServices, DatabaseServices $databaseServices)
+    public function gameStart(GameServices $gameServices, UserServices $userServices): JsonResponse
     {
         // 4 random players on 6 seats table
         $players = $userServices->getRandomUsers(4);
@@ -23,14 +25,16 @@ class GameController extends Controller
         
         $table = $gameServices->gameInit($players, $tableMaxSeats, $buyIn, $smallBlind, $bigBlind);
 
-        $result = $databaseServices->saveTableToDatabase($table);
-
         session()->put('table', $table);
         dd(session()->get('table'));
+
+        return response()->json($table);
     }
 
-    public function play()
+    public function getTable(GetTableRequest $request, GameServices $gameServices)
     {
-        dd(session()->get('table'));
+        $params = $request->validated();
+
+        $result = $gameServices->getTable($params);
     }
 }
