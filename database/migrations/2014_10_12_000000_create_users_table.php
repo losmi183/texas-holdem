@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            // $table->unsignedBigInteger('balance')->default(0);
+            $table->unsignedBigInteger('balance')->default(0);
             $table->timestamps();
         });
     }

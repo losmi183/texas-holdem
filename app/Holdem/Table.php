@@ -20,23 +20,30 @@ class Table
     private ?Card $turn = null;
     private ?Card $river = null;
 
-    public function __construct(int $tableMaxSeats, ?Collection $players)
+    public function __construct(int $tableMaxSeats)
     {
         $this->config = config('holdem');
         $this->id = rand(100,999) . time(); // random id for table generate from 100-999 and timestamp
         $this->tableMaxSeats = $tableMaxSeats;
         $this->deck = new Deck($this->config['card'], $this->config['suit'] );
-        $this->players = $players;
-
+        
         // Generate empty seats array
         for ($i = 0; $i < $this->tableMaxSeats; $i++) {
             $this->seats[$i] = null;            
-        }
+        }   
+    }
+
+    public function addPlayers(?Collection $players): void
+    {
+        $this->players = $players;
         // Adding players to seats
         foreach ($this->players as $key => $player) {
             $this->seats[$key] = new Player($player);
         }
+    }
 
+    public function deal(): void
+    {
         // Deal first cards to players
         foreach ($this->seats as $key => $seat) {
             if ($seat) {
@@ -57,7 +64,10 @@ class Table
         $this->turn = $this->deck->dealCard();
         // Deal river 
         $this->river = $this->deck->dealCard();
+    }
 
+    public function evaluateHands(): void
+    {
         /**
          * Evaluate every player hand
          */
@@ -69,7 +79,5 @@ class Table
                 $seat->finalCards = $handEvaluatorService->evaluateHand($playerAndTableCards, $this->config['card'], $this->config['suit']);     
             }
         }
-
-        dd($this);
     }
 }
