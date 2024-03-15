@@ -22,7 +22,9 @@ return new class extends Migration
             $table->unsignedSmallInteger('phase');
             $table->unsignedBigInteger('pot');
 
-            $table->json('table_cards');
+            $table->json('flop');
+            $table->json('turn');
+            $table->json('river');
 
             $table->timestamps();
         });

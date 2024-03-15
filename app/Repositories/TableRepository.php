@@ -9,13 +9,13 @@ class TableRepository
 {
     public function store(Table $table): void
     {
-        // DB::table('tables')->insert([
-        //     'id' => $table->id,
-        //     'phase' => $table->phase,
-        //     'pot' => $table->pot,
-        //     'table_cards' => json_encode($table->tableCards),
-        //     'big_blind' => $table->bigBlind,
-        // ]);
+        DB::table('tables')->insert([
+            'id' => $table->id,
+            'table_max_seats' => $table->tableMaxSeats,
+            'buy_in' => $table->buyIn,
+            'small_blind' => $table->smallBlind,
+            'big_blind' => $table->bigBlind,
+        ]);
     }
 
 

@@ -18,11 +18,18 @@ return new class extends Migration
 
             $table->unsignedBigInteger('table_id')->nullable();
             $table->foreign('table_id')->references('id')->on('tables')->onDelete('cascade');
+            
+            $table->unsignedSmallInteger('slot')->nullable();  // Position on table
 
-            $table->unsignedBigInteger('player_id')->nullable();
-            $table->foreign('player_id')->references('id')->on('users')->onDelete('set null');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
 
-            $table->unsignedBigInteger('stack');
+            
+            $table->string('player_name')->nullable();
+            $table->string('chips')->nullable();
+            $table->json('hand')->nullable();
+            $table->json('final_cards')->nullable();
+
             $table->boolean('active');
 
             $table->timestamps();
