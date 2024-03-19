@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DeckController;
+use App\Http\Controllers\FirebaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,5 +19,6 @@ Route::get('/', [DeckController::class, 'create']);
 Route::get('/session', function() {
     dd(session()->get('table'));
 });
+Route::get('/firebase', [FirebaseController::class, 'create']);
 
 
