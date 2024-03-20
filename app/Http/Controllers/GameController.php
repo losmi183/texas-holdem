@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Services\GameServices;
 use App\Services\UserServices;
+use Illuminate\Http\JsonResponse;
 use App\Services\DatabaseServices;
 use App\Http\Requests\GetTableRequest;
+use App\Http\Requests\DeleteTableRequest;
+use App\Http\Requests\UpdateTableRequest;
 
 class GameController extends Controller
 {
@@ -25,16 +27,37 @@ class GameController extends Controller
         
         $table = $gameServices->gameInit($players, $tableMaxSeats, $buyIn, $smallBlind, $bigBlind);
 
-        session()->put('table', $table);
-        dd(session()->get('table'));
+        // session()->put('table', $table);
+        // dd(session()->get('table'));
 
-        return response()->json($table);
+        return response()->json([
+            'table_id' => $table->id
+        ]);
     }
 
-    public function getTable(GetTableRequest $request, GameServices $gameServices)
+    public function getTable(GetTableRequest $request, GameServices $gameServices): JsonResponse
     {
         $params = $request->validated();
-
         $result = $gameServices->getTable($params);
+        return response()->json([
+            'table_id' => $result
+        ]);
+    }
+
+    public function updateTable(UpdateTableRequest $request, GameServices $gameServices): void
+    {
+        $params = $request->validated();
+        $result = $gameServices->updateTable($params);
+        return response()->json([
+            'table_id' => $result
+        ]);
+    }
+    public function deleteTable(DeleteTableRequest $request, GameServices $gameServices): void
+    {
+        $params = $request->validated();
+        $result = $gameServices->deleteTable($params);
+        return response()->json([
+            'table_id' => $result
+        ]);
     }
 }

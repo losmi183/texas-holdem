@@ -5,16 +5,19 @@ namespace App\Services;
 use App\Holdem\Deck;
 use App\Holdem\Table;
 use Illuminate\Support\Collection;
+use App\Repositories\FirebaseRepository;
 
 class GameServices {
 
     private DatabaseServices $databaseServices;
+    private FirebaseRepository $firebaseRepository;
 
-    public function __construct(DatabaseServices $databaseServices) {
+    public function __construct(DatabaseServices $databaseServices, FirebaseRepository $firebaseRepository) {
         $this->databaseServices = $databaseServices;
+        $this->firebaseRepository = $firebaseRepository;
     }
 
-    public function gameInit(Collection $players, int $tableMaxSeats, int $buyIn, int $smallBlind, int $bigBlind): Table
+    public function gameInit(Collection $players, int $tableMaxSeats, int $buyIn, int $smallBlind, int $bigBlind)
     {   
         // Init empty table with players and deck
         $table = new Table($tableMaxSeats, $buyIn, $smallBlind, $bigBlind);
@@ -23,13 +26,25 @@ class GameServices {
         $table->deal();
         $table->evaluateHands();
 
-        $this->databaseServices->saveTableToDatabase($table);
+        // Mariadb
+        // $this->databaseServices->saveTableToDatabase($table);
 
-        return $table;    
+        // Save to firebase
+        $this->firebaseRepository->store($table);
+
+        return $table;
     }
 
     public function getTable(array $params)
     {
-        $table = $this->databaseServices->getTable($params['table_id']);
+        return $this->firebaseRepository->get($params['table_id']);
+    }
+    public function updateTable(array $params)
+    {
+        return $this->firebaseRepository->update($params['table_id']);
+    }
+    public function deleteTable(array $params)
+    {
+        return $this->firebaseRepository->delete($params['table_id']);
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 
-class GetTableRequest extends FormRequest
+class UpdateTableRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,6 @@ class GetTableRequest extends FormRequest
     {
         return [
             'table_id' => 'required|string',
-            'user_id' => 'required|int',
         ];
     }
         /**
