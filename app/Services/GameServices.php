@@ -4,15 +4,16 @@ namespace App\Services;
 
 use App\Holdem\Deck;
 use App\Holdem\Table;
+use App\Interfaces\DatabaseInterface;
 use Illuminate\Support\Collection;
 use App\Repositories\FirebaseRepository;
 
 class GameServices {
 
     private DatabaseServices $databaseServices;
-    private FirebaseRepository $firebaseRepository;
+    private DatabaseInterface $firebaseRepository;
 
-    public function __construct(DatabaseServices $databaseServices, FirebaseRepository $firebaseRepository) {
+    public function __construct(DatabaseServices $databaseServices, DatabaseInterface $firebaseRepository) {
         $this->databaseServices = $databaseServices;
         $this->firebaseRepository = $firebaseRepository;
     }

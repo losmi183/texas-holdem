@@ -14,8 +14,9 @@ return [
     | you may use many connections at once using the Database library.
     |
     */
+    'holdemdb' => env('HOLDEM_DB', 'firebase'),
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'firebase'),
 
     /*
     |--------------------------------------------------------------------------
