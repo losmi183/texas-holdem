@@ -17,7 +17,9 @@ use App\Http\Controllers\GameController;
 
 // Set new table with cards and players
 Route::get('/start-game', [GameController::class, 'gameStart']);
+
 // Get table
+Route::post('/get-all-tables', [GameController::class, 'getAllTables']);
 Route::post('/get-table', [GameController::class, 'getTable']);
 // Update table
 Route::post('/update-table', [GameController::class, 'updateTable']);

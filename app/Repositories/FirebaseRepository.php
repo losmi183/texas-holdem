@@ -17,6 +17,28 @@ class FirebaseRepository implements DatabaseInterface
         $this->database = $database;
     }
 
+    public function getAll(): array
+    {
+        try {
+            $reference = $this->database->getReference('table');
+            $snapshot = $reference->getSnapshot();
+            $tables = [];
+    
+            foreach ($snapshot->getValue() as $key => $value) {
+                if(isset($value['id'])) {
+                    $tables[$key]['table_id'] = $value['id'];
+                    $tables[$key]['players'] = count($value['players']);
+                }
+            }
+    
+            return $tables;
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            abort(500, 'Firebase error');
+        }
+    }
+    
+
     public function get(string $key)
     {
         try {
@@ -38,5 +60,30 @@ class FirebaseRepository implements DatabaseInterface
             abort(500, 'Firebase error');
         }
         return $postRef;
+    }
+
+    public function update(string $key): bool
+    {
+        try {
+            $reference = $this->database->getReference('table')->getChild($key);
+            $reference->update([
+                'pot' => 654 // Ovdje možete postaviti bilo koju novu vrijednost za 'pot'
+            ]);
+            return true;
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            abort(500, 'Firebase error');
+        }
+    }
+    public function delete(string $key): bool
+    {
+        try {
+            $reference = $this->database->getReference('table')->getChild($key);
+            $reference->remove();
+            return true;
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            abort(500, 'Firebase error');
+        }
     }
 }

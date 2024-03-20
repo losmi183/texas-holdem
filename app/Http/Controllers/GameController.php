@@ -35,6 +35,14 @@ class GameController extends Controller
         ]);
     }
 
+    public function getAllTables(GameServices $gameServices): JsonResponse
+    {
+        $result = $gameServices->getAllTables();
+        return response()->json([
+            'table_id' => $result
+        ]);
+    }
+
     public function getTable(GetTableRequest $request, GameServices $gameServices): JsonResponse
     {
         $params = $request->validated();
@@ -44,20 +52,27 @@ class GameController extends Controller
         ]);
     }
 
-    public function updateTable(UpdateTableRequest $request, GameServices $gameServices): void
+    public function updateTable(UpdateTableRequest $request, GameServices $gameServices): JsonResponse
     {
         $params = $request->validated();
-        $result = $gameServices->updateTable($params);
-        return response()->json([
-            'table_id' => $result
-        ]);
+        if($gameServices->updateTable($params)) {
+            return response()->json([
+                'table_id' => 'Table update successfully'
+            ]);
+        } else {
+            abort(400, 'Update not successfully');
+        }
     }
-    public function deleteTable(DeleteTableRequest $request, GameServices $gameServices): void
+    public function deleteTable(DeleteTableRequest $request, GameServices $gameServices): JsonResponse
     {
         $params = $request->validated();
         $result = $gameServices->deleteTable($params);
-        return response()->json([
-            'table_id' => $result
-        ]);
+        if($gameServices->deleteTable($params)) {
+            return response()->json([
+                'table_id' => 'Table delete successfully'
+            ]);
+        } else {
+            abort(400, 'Delete not successfully');
+        }
     }
 }

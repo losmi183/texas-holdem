@@ -34,16 +34,20 @@ class GameServices {
 
         return $table;
     }
+    public function getAllTables()
+    {
+        return $this->firebaseRepository->getAll();
+    }
 
     public function getTable(array $params)
     {
         return $this->firebaseRepository->get($params['table_id']);
     }
-    public function updateTable(array $params)
+    public function updateTable(array $params): bool
     {
         return $this->firebaseRepository->update($params['table_id']);
     }
-    public function deleteTable(array $params)
+    public function deleteTable(array $params): bool
     {
         return $this->firebaseRepository->delete($params['table_id']);
     }
